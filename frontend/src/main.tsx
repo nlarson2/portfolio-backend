@@ -1,7 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 // import "tailwindcss/base.css"
 // import "tailwindcss/components.css"
 // import "tailwindcss/utilities.css"
@@ -9,5 +10,5 @@ import './index.css'
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
