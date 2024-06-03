@@ -1,4 +1,4 @@
-export interface Post {
+export type Post = {
   title: string;
   content: string;
-}
+};
