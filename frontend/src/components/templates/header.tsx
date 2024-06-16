@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { SignedIn, SignOutButton } from '@clerk/clerk-react';
 
 export const Header: React.FC = () => {
   return (
@@ -23,6 +24,9 @@ export const Header: React.FC = () => {
           <Link to="/contact" className="text-platinum hover:text-gray-200">
             Contact
           </Link>
+          <SignedIn>
+            <SignOutButton className="text-platinum hover:text-gray-200" />
+          </SignedIn>
         </nav>
       </div>
     </header>

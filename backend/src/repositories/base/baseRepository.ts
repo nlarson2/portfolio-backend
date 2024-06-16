@@ -1,28 +1,33 @@
 import { IWrite, IRead } from "../interfaces";
-import { Client as pgDB } from "ts-postgres";
+// import { Client as pgDB } from "ts-postgres";
+import { Client as pgDB } from "pg";
 
 export abstract class BaseRepository<T, I>
   implements IWrite<T, I>, IRead<T, I>
 {
-  private db: pgDB;
+  protected db: pgDB;
   constructor(db: pgDB) {
     this.db = db;
   }
 
-  find(item: T): Promise<T[]> {
+  find(_item: T): Promise<T[]> {
     throw new Error("Method not implemented");
   }
-  findOne(id: I): Promise<T> {
+  findOne(_id: I): Promise<T> {
     throw new Error("Method not implemented");
   }
 
-  create(item: T): Promise<boolean> {
+  getAll(): Promise<T[]> {
     throw new Error("Method not implemented");
   }
-  update(id: I, item: T): Promise<boolean> {
+
+  create(_item: T): Promise<boolean> {
     throw new Error("Method not implemented");
   }
-  delete(id: I): Promise<boolean> {
+  update(_id: I, _item: T): Promise<boolean> {
+    throw new Error("Method not implemented");
+  }
+  delete(_id: I): Promise<boolean> {
     throw new Error("Method not implemented");
   }
 }

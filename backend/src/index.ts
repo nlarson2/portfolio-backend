@@ -1,9 +1,16 @@
 import { fastify } from "fastify";
 import cors from "@fastify/cors";
 import { posts } from "./routes/posts";
+import db from "./middleware/db";
 
 const server: any = fastify();
 server.register(cors, {});
+server.register(db, {
+  host: "localhost",
+  dbname: "portfolio_db",
+  username: "portfolio_user",
+  password: "pgtestpassword",
+});
 server.register(posts, { prefix: "/posts" });
 
 server.listen({ port: 44444 }, (err: any, address: any) => {

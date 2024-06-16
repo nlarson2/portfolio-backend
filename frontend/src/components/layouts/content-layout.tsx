@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { Header, Footer } from '../seo';
+import { Header, Footer } from '../templates';
 
 interface ContentLayoutProps {
   children?: React.ReactNode;

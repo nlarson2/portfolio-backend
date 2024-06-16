@@ -1,6 +1,13 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import { FastifyReply, FastifyRequest, FastifyInstance } from "fastify";
 import { Post } from "../models/postModel";
 import { IGetPost, ICreatePost } from "../interfaces";
+import { Repos } from "../middleware/db";
+
+declare module "fastify" {
+  interface FastifyInstance {
+    db: Repos;
+  }
+}
 
 export class PostController {
   public static getPost = (
@@ -15,11 +22,15 @@ export class PostController {
     reply.code(200).send({ post: post });
   };
 
-  public static getListOfPosts = (_: FastifyRequest, reply: FastifyReply) => {
-    let post1: Post = { title: "test1", content: "test1 content" };
-    let post2: Post = { title: "test2", content: "test2 content" };
-
-    return reply.code(200).send({ posts: [post1, post2] });
+  public static getListOfPosts = async (
+    request: FastifyRequest,
+    reply: FastifyReply,
+  ) => {
+    console.log("HERE1");
+    let posts = await request.server.db.postRepo.getAll();
+    console.log("HERE2");
+    console.log(posts);
+    return reply.code(200).send({ posts: posts });
   };
 
   public static createPost = (
