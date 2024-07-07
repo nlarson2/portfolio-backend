@@ -8,7 +8,7 @@ interface IParamsSinglePost {
 const posts = (fastify: FastifyInstance, opts: any, done: any) => {
   fastify.get("/blog", opts, PostController.getListOfPosts);
   fastify.get("/blog/:id", PostController.getPost);
-  fastify.post("/creat-post", PostController.createPost);
+  fastify.post("/create-post", PostController.createPost);
   done();
 };
 

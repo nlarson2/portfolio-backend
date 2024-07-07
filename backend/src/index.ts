@@ -2,6 +2,9 @@ import { fastify } from "fastify";
 import cors from "@fastify/cors";
 import { posts } from "./routes/posts";
 import db from "./middleware/db";
+import auth from "./middleware/auth";
+import dotenv from "dotenv";
+dotenv.config();
 
 const server: any = fastify();
 server.register(cors, {});
@@ -11,6 +14,7 @@ server.register(db, {
   username: "portfolio_user",
   password: "pgtestpassword",
 });
+server.register(auth);
 server.register(posts, { prefix: "/posts" });
 
 server.listen({ port: 44444 }, (err: any, address: any) => {

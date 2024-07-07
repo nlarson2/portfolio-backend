@@ -1,12 +1,12 @@
 import { BaseRepository } from "./base/baseRepository";
-import { Post } from "../models/postModel";
+import { Post, PostType } from "../models/postModel";
 
 export class PostRepository extends BaseRepository<Post, string> {
   async find(_item: Post): Promise<Post[]> {
     return [];
   }
   async findOne(_id: string): Promise<Post> {
-    return { title: "title", content: "content" };
+    return { title: "title", content: "content", type: PostType.Blog };
   }
   async getAll(): Promise<Post[]> {
     let posts: Post[] = [];
