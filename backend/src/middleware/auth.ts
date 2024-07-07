@@ -11,35 +11,37 @@ export interface MetaData {
   role: string;
 }
 
+const clerkClient = createClerkClient({
+  secretKey: process.env.CLERK_SECRET_KEY,
+});
+
+export const CheckIsAuthenticated = async (jwt: string): Promise<boolean> => {
+  try {
+    const userData = await clerkClient.verifyToken(jwt.split(" ")[1]);
+    return userData != undefined;
+  } catch (e: any) {
+    console.log(`Failed to authenticate:\nToken: ${jwt}\nError: ${e}`);
+  }
+  return false;
+};
+
+export const CheckIsAdmin = async (jwt: string): Promise<boolean> => {
+  try {
+    const userData = await clerkClient.verifyToken(jwt.split(" ")[1]);
+    if (!userData) return false;
+    const metaData: MetaData = userData.metadata as MetaData;
+    return metaData && metaData.role === "admin";
+  } catch (e: any) {
+    console.log(
+      `Failed to authenticate:\nToken: ${jwt}\nError: ${e.errors[0].meta}`,
+    );
+  }
+  return false;
+};
+
 const ClerkAuthentication: FastifyPluginAsync = async (
   instance: FastifyInstance,
 ) => {
-  const clerkClient = createClerkClient({
-    secretKey: process.env.CLERK_SECRET_KEY,
-  });
-
-  const CheckIsAuthenticated = async (jwt: string): Promise<boolean> => {
-    try {
-      const userData = await clerkClient.verifyToken(jwt.split(" ")[1]);
-      return userData != undefined;
-    } catch (e: any) {
-      console.error("Failed to authenticate: ", e);
-    }
-    return false;
-  };
-
-  const CheckIsAdmin = async (jwt: string): Promise<boolean> => {
-    try {
-      const userData = await clerkClient.verifyToken(jwt.split(" ")[1]);
-      if (!userData) return false;
-      const metaData: MetaData = userData.metadata as MetaData;
-      return metaData && metaData.role === "admin";
-    } catch (e: any) {
-      console.log("Failed to authenticate: ", e.errors[0].meta);
-    }
-    return false;
-  };
-
   const auth: Authentication = {
     IsAuthenticated: CheckIsAuthenticated,
     IsAdmin: CheckIsAdmin,

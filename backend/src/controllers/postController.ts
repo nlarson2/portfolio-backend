@@ -12,16 +12,12 @@ declare module "fastify" {
 }
 
 export class PostController {
-  public static getPost = (
+  public static getPost = async (
     request: FastifyRequest<IGetPost>,
     reply: FastifyReply,
-  ): void => {
+  ) => {
     const { id: uuid } = request.params;
-    let post: Post = {
-      title: `test-${uuid}`,
-      content: `test content - ${uuid}`,
-      type: PostType.Blog,
-    };
+    let post = await request.server.db.postRepo.findOne(uuid);
     reply.code(200).send({ post: post });
   };
 
@@ -39,10 +35,7 @@ export class PostController {
   ) => {
     const token = request.headers.authorization;
     if (token) {
-      const isAdmin = await request.server.auth.IsAdmin(token);
-      console.log("HERE", isAdmin);
-      if (isAdmin) {
-        console.log("HERE");
+      if (await request.server.auth.IsAdmin(token)) {
         const { content } = request.body;
         reply.send({ content: content });
         return;

@@ -1,6 +1,6 @@
 export enum PostType {
-  Blog,
-  Project,
+  Blog = "blog",
+  Project = "project",
 }
 
 export type Post = {

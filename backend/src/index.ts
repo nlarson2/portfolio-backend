@@ -9,10 +9,10 @@ dotenv.config();
 const server: any = fastify();
 server.register(cors, {});
 server.register(db, {
-  host: "localhost",
-  dbname: "portfolio_db",
-  username: "portfolio_user",
-  password: "pgtestpassword",
+  host: process.env.DB_HOST,
+  dbname: process.env.DB_NAME,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASS,
 });
 server.register(auth);
 server.register(posts, { prefix: "/posts" });

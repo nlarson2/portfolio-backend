@@ -13,7 +13,7 @@ export abstract class BaseRepository<T, I>
   find(_item: T): Promise<T[]> {
     throw new Error("Method not implemented");
   }
-  findOne(_id: I): Promise<T> {
+  findOne(_id: I): Promise<T | undefined> {
     throw new Error("Method not implemented");
   }
 
@@ -21,10 +21,10 @@ export abstract class BaseRepository<T, I>
     throw new Error("Method not implemented");
   }
 
-  create(_item: T): Promise<boolean> {
+  create(_item: T): Promise<T|undefined> {
     throw new Error("Method not implemented");
   }
-  update(_id: I, _item: T): Promise<boolean> {
+  update(_id: I, _item: T): Promise<T|undefined> {
     throw new Error("Method not implemented");
   }
   delete(_id: I): Promise<boolean> {
