@@ -8,9 +8,7 @@ export type Post = {
   uuid?: string;
   title: string;
   content: string;
-  userId?: number;
   createdAt?: Date;
-  type: PostType;
   thumbnailLink?: string;
   diqusComentLink?: string;
 };

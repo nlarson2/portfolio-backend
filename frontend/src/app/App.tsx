@@ -8,13 +8,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {
   SignedIn,
   SignedOut,
-  SignInButton,
   SignOutButton,
   SignIn,
   useUser,
 } from '@clerk/clerk-react';
 
-import BlogRoutes from './routes/blogs';
+import PostRoutes from './routes/post';
 
 export const App: React.FC = () => {
   const { user } = useUser();
@@ -25,7 +24,7 @@ export const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/resume" element={<Resume />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/blog/*" element={<BlogRoutes />} />
+          <Route path="/post/*" element={<PostRoutes />} />
           <Route
             path="/dashboard"
             element={

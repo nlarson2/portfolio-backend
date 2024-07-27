@@ -17,7 +17,6 @@ const clientSetup = async () => {
 let post: Post = {
   title: "test post title",
   content: "test post content",
-  type: PostType.Blog,
 };
 
 describe("Post Crud Operation", () => {

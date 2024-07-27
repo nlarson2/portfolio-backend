@@ -15,7 +15,7 @@ server.register(db, {
   password: process.env.DB_PASS,
 });
 server.register(auth);
-server.register(posts, { prefix: "/posts" });
+server.register(posts, { prefix: "/post" });
 
 server.listen({ port: 44444 }, (err: any, address: any) => {
   if (err) {

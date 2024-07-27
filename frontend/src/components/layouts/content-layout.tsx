@@ -17,8 +17,10 @@ export const ContentLayout: React.FC<ContentLayoutProps> = ({
         <title> {title ? title : 'My Portfolio'}</title>
       </Helmet>
       <Header />
-      {title && <h1 className="text-2xl font-bold">{title}</h1>}
-      {children}
+      <div className="w-100 m-10">
+        {title && <h1 className="text-2xl font-bold">{title}</h1>}
+        {children}
+      </div>
       <Footer />
     </>
   );

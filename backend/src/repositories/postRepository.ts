@@ -1,12 +1,12 @@
 import { BaseRepository } from "./base/baseRepository";
-import { Post, PostType } from "../models/postModel";
+import { Post } from "../models/postModel";
 import { v4 as uuidv4 } from "uuid";
-import { i } from "@clerk/clerk-react/dist/controlComponents-CzpRUsyv";
 
 export class PostRepository extends BaseRepository<Post, string> {
   async find(_item: Post): Promise<Post[]> {
     return [];
   }
+
   async findOne(id: string): Promise<Post | undefined> {
     let posts: Post[] = [];
     const query = 'select * from public."Posts" where uuid=$1';
@@ -16,9 +16,12 @@ export class PostRepository extends BaseRepository<Post, string> {
     console.log(posts);
     return posts.length > 0 ? posts[0] : undefined;
   }
+
   async getAll(): Promise<Post[]> {
     let posts: Post[] = [];
-    const results = await this.db.query<Post>('select * from public."Posts"');
+    const results = await this.db.query<Post>(
+      'select uuid, title, created_at from public."Posts"',
+    );
     posts = [...results.rows];
     return posts;
   }
@@ -26,8 +29,9 @@ export class PostRepository extends BaseRepository<Post, string> {
   async create(item: Post): Promise<Post | undefined> {
     try {
       const uuid = uuidv4();
-      const query = `insert into public."Posts"(uuid, title, content, type) values($1, $2, $3, $4)`;
-      const values = [uuid, item.title, item.content, item.type];
+      const query = `insert into public."Posts"(uuid, title, content, created_at) values($1, $2, $3, to_timestamp($4/1000.0))`;
+      const values = [uuid, item.title, item.content, Date.now()];
+      console.log(values);
       await this.db.query<Post>(query, values);
       return await this.findOne(uuid);
     } catch (e: any) {
@@ -35,6 +39,7 @@ export class PostRepository extends BaseRepository<Post, string> {
       return undefined;
     }
   }
+
   async update(id: string, item: Post): Promise<Post | undefined> {
     try {
       const query = `update public."Posts" set title=$1, content=$2 where uuid=$3`;
@@ -46,6 +51,7 @@ export class PostRepository extends BaseRepository<Post, string> {
       return undefined;
     }
   }
+
   async delete(id: string): Promise<boolean> {
     try {
       const query = `delete from public."Posts" where uuid=$1`;

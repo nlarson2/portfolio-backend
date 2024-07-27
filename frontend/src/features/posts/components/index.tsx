@@ -1,5 +1,4 @@
-import { Blog } from './blog';
-import { BlogList } from './bloglist';
-import { Post } from './post';
+import { PostView } from './postView';
+import { PostLink } from './postLink';
 
-export { Blog, Post, BlogList };
+export { PostView, PostLink };
