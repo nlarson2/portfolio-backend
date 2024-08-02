@@ -20,7 +20,7 @@ export class PostRepository extends BaseRepository<Post, string> {
   async getAll(): Promise<Post[]> {
     let posts: Post[] = [];
     const results = await this.db.query<Post>(
-      'select uuid, title, created_at from public."Posts"',
+      'select uuid, title, created_at from public."Posts" order by created_at desc',
     );
     posts = [...results.rows];
     return posts;
@@ -31,7 +31,6 @@ export class PostRepository extends BaseRepository<Post, string> {
       const uuid = uuidv4();
       const query = `insert into public."Posts"(uuid, title, content, created_at) values($1, $2, $3, to_timestamp($4/1000.0))`;
       const values = [uuid, item.title, item.content, Date.now()];
-      console.log(values);
       await this.db.query<Post>(query, values);
       return await this.findOne(uuid);
     } catch (e: any) {

@@ -6,7 +6,7 @@ import auth from "./middleware/auth";
 import dotenv from "dotenv";
 dotenv.config();
 
-const server: any = fastify();
+const server: any = fastify({logger: true});
 server.register(cors, {});
 server.register(db, {
   host: process.env.DB_HOST,

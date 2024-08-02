@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { Post, PostType } from "../models/postModel";
-import { IGetPost, ICreatePost } from "../interfaces";
+import { IGetPost, ICreatePost, IUpdatePost } from "../interfaces";
 import { Repos } from "../middleware/db";
 import { Authentication } from "../middleware/auth";
 
@@ -36,12 +36,37 @@ export class PostController {
     const token = request.headers.authorization;
     if (token) {
       if (await request.server.auth.IsAdmin(token)) {
-        const { content } = request.body;
-        reply.send({ content: content });
+        const newPost = request.body;
+        const post = await request.server.db.postRepo.create(newPost);
+
+        if (post) {
+          reply.code(200).send({ uuid: post.uuid });
+          return;
+        }
+      }
+    }
+    reply.code(401).send({ resp: "invalid token" });
+    return;
+  };
+
+  public static updatePost = async (
+    request: FastifyRequest<IUpdatePost>,
+    reply: FastifyReply,
+  ) => {
+    const token = request.headers.authorization;
+    if (token) {
+      if (await request.server.auth.IsAdmin(token)) {
+        const post = request.body;
+        if (post.uuid) {
+          await request.server.db.postRepo.update(post.uuid, post);
+          reply.code(200).send({ uuid: post.uuid });
+        } else {
+          reply.code(400);
+        }
         return;
       }
     }
-    reply.code(404);
+    reply.code(401).send({ resp: "invalid token" });
     return;
   };
 }
