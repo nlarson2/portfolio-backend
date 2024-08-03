@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Post } from '../types';
 import { SignedIn } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
@@ -71,7 +71,7 @@ export const PostView: React.FC<PostViewInterface> = ({
   const getDisplay = (element: Element): React.ReactNode => {
     switch (element.type) {
       case ElementType.TEXT:
-        return <p className="break-words text-2xl">&emsp;{element.content}</p>;
+        return <p className="break-words text-xl">&emsp;{element.content}</p>;
       case ElementType.BREAK:
         return <br />;
       case ElementType.IMAGE:
@@ -90,7 +90,7 @@ export const PostView: React.FC<PostViewInterface> = ({
   }, [post]);
 
   return (
-    <div className="lg:w-3/5 m-auto">
+    <>
       {cantUpdate && (
         <SignedIn>
           <input
@@ -103,8 +103,10 @@ export const PostView: React.FC<PostViewInterface> = ({
           />
         </SignedIn>
       )}
-      <p className="text-4xl font-bold">{post?.title}</p>
-      <p>Created: {post?.created_at?.split('T')[0]}</p>
+      <p className="text-7xl font-bold text-center">{post?.title}</p>
+      <p className="text-center my-5">
+        Created: {post?.created_at?.split('T')[0]}
+      </p>
 
       <div>
         {content.map((element: Element, index: number) => {
@@ -113,6 +115,6 @@ export const PostView: React.FC<PostViewInterface> = ({
           );
         })}
       </div>
-    </div>
+    </>
   );
 };

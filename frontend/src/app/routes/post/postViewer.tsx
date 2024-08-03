@@ -4,6 +4,7 @@ import { ContentLayout } from '../../../components/layouts';
 import { PostView } from '../../../features/posts/components';
 import { GetPostByID } from '../../../features/posts/api/get-posts';
 import { Post } from '../../../features/posts/types';
+import { DiscussionEmbed } from 'disqus-react';
 
 export const PostViewer: React.FC = () => {
   const { postId } = useParams();
@@ -20,8 +21,23 @@ export const PostViewer: React.FC = () => {
   }, []);
   return (
     <ContentLayout>
-      {post && <PostView post={post} cantUpdate={true} />}
-      {/* put comment stuff here */}
+      <div className="lg:w-3/5 m-auto">
+        {post && (
+          <>
+            <PostView post={post} cantUpdate={true} />
+            {/* put comment stuff here */}
+
+            <DiscussionEmbed
+              shortname="staging-15"
+              config={{
+                url: `http://statign-15.disqus.com/post/${postId}`,
+                identifier: postId,
+                title: post?.title,
+              }}
+            />
+          </>
+        )}
+      </div>
     </ContentLayout>
   );
 };
