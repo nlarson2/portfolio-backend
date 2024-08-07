@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { Post, PostType } from "../models/postModel";
-import { IGetPost, ICreatePost, IUpdatePost } from "../interfaces";
+import { IGetPost, ICreatePost, IUpdatePost, IDeletePost } from "../interfaces";
 import { Repos } from "../middleware/db";
 import { Authentication } from "../middleware/auth";
 
@@ -57,9 +56,31 @@ export class PostController {
     if (token) {
       if (await request.server.auth.IsAdmin(token)) {
         const post = request.body;
+        console.log(post);
         if (post.uuid) {
           await request.server.db.postRepo.update(post.uuid, post);
           reply.code(200).send({ uuid: post.uuid });
+        } else {
+          reply.code(400);
+        }
+        return;
+      }
+    }
+    reply.code(401).send({ resp: "invalid token" });
+    return;
+  };
+
+  public static deletePost = async (
+    request: FastifyRequest<IDeletePost>,
+    reply: FastifyReply,
+  ) => {
+    const token = request.headers.authorization;
+    if (token) {
+      if (await request.server.auth.IsAdmin(token)) {
+        const post = request.body;
+        if (post.uuid) {
+          await request.server.db.postRepo.delete(post.uuid);
+          reply.code(200);
         } else {
           reply.code(400);
         }

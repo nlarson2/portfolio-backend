@@ -15,6 +15,12 @@ module.exports = {
         'jet-grey': '#333333',
         'honolulu-blue': '#0077B6',
       },
+      borderColor: {
+        'space-cadet-blue': '#1A1A2E',
+        platinum: '#EAEAEA',
+        'jet-grey': '#333333',
+        'honolulu-blue': '#0077B6',
+      },
     },
   },
   plugins: [],

@@ -1,7 +1,4 @@
-export enum PostType {
-  Blog = "blog",
-  Project = "project",
-}
+import { Tag } from "./tagModel";
 
 export type Post = {
   id?: number;
@@ -11,4 +8,5 @@ export type Post = {
   createdAt?: Date;
   thumbnailLink?: string;
   diqusComentLink?: string;
+  tags?: Tag[];
 };

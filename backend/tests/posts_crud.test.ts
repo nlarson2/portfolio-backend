@@ -1,6 +1,6 @@
 import { Client } from "pg";
 import { PostRepository } from "../src/repositories/postRepository";
-import { Post, PostType } from "../src/models/postModel";
+import { Post } from "../src/models/postModel";
 
 const clientSetup = async () => {
   const client = new Client({

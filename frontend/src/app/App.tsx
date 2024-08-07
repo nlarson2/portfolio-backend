@@ -14,6 +14,7 @@ import {
 } from '@clerk/clerk-react';
 
 import PostRoutes from './routes/post';
+import TagRoutes from './routes/tags';
 
 export const App: React.FC = () => {
   const { user } = useUser();
@@ -25,6 +26,7 @@ export const App: React.FC = () => {
           <Route path="/resume" element={<Resume />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/post/*" element={<PostRoutes />} />
+          <Route path="/tags/*" element={<TagRoutes />} />
           <Route
             path="/dashboard"
             element={

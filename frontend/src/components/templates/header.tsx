@@ -6,8 +6,7 @@ import useDisplayType from '../../hooks/display-type';
 
 const navOptions: { [key: string]: string } = {
   Home: '/',
-  Post: '/post',
-  Projects: '/projects',
+  Posts: '/post',
   Resume: '/resume',
   Contact: '/contact',
 };

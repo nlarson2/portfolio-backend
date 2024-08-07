@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Post } from '../types';
-import { SignedIn } from '@clerk/clerk-react';
-import { useNavigate } from 'react-router-dom';
+import { Post, Tag } from '../types';
 
 interface PostViewInterface {
   post: Post;
-  cantUpdate?: boolean;
 }
 
 enum ElementType {
@@ -27,10 +24,13 @@ const tagElementType: { [key: string]: ElementType } = {
 
 export const PostView: React.FC<PostViewInterface> = ({
   post,
-  cantUpdate,
 }: PostViewInterface) => {
-  const navigate = useNavigate();
   const [content, setContent] = useState<Element[]>([]);
+  const tags = post.tags
+    ?.map((tag: Tag) => {
+      return tag.name;
+    })
+    .join(', ');
 
   const processContent = async () => {
     let newContent = [];
@@ -91,23 +91,11 @@ export const PostView: React.FC<PostViewInterface> = ({
 
   return (
     <>
-      {cantUpdate && (
-        <SignedIn>
-          <input
-            className="bg-space-cadet-blue text-platinum px-10 py-5 rounded-lg"
-            type="button"
-            value={'Update Post'}
-            onClick={() => {
-              navigate(`/post/update/${post.uuid}`);
-            }}
-          />
-        </SignedIn>
-      )}
       <p className="text-7xl font-bold text-center">{post?.title}</p>
       <p className="text-center my-5">
         Created: {post?.created_at?.split('T')[0]}
       </p>
-
+      {tags?.length > 0 && <p className="text-center my-5">Tags: {tags}</p>}
       <div>
         {content.map((element: Element, index: number) => {
           return (

@@ -1,12 +1,13 @@
 import { fastify } from "fastify";
 import cors from "@fastify/cors";
 import { posts } from "./routes/posts";
+import { tags } from "./routes/tags";
 import db from "./middleware/db";
 import auth from "./middleware/auth";
 import dotenv from "dotenv";
 dotenv.config();
 
-const server: any = fastify({logger: true});
+const server: any = fastify({ logger: true });
 server.register(cors, {});
 server.register(db, {
   host: process.env.DB_HOST,
@@ -16,6 +17,7 @@ server.register(db, {
 });
 server.register(auth);
 server.register(posts, { prefix: "/post" });
+server.register(tags, { prefix: "/tags" });
 
 server.listen({ port: 44444 }, (err: any, address: any) => {
   if (err) {

@@ -2,10 +2,6 @@ export type Tag = {
   id?: number;
   name: string;
 };
-export type SelectTag = {
-  selected: boolean;
-  tag: Tag;
-}
 
 export type Post = {
   id?: number;
@@ -15,5 +11,5 @@ export type Post = {
   created_at?: string;
   thumbnail_link?: string;
   diqus_comment_link?: string;
-  tags?: Tag[];
+  tags: Tag[];
 };

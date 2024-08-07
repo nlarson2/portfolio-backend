@@ -4,9 +4,14 @@ import { PostViewer } from './postViewer';
 import { PostListViewer } from './postListViewer';
 import { PostEditorView } from './postEditorView';
 import React from 'react';
-import { SignedIn } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
+import { NotFound } from '../not-found';
 
 const PostRoutes: React.FC<RouteProps> = () => {
+  const { user } = useUser();
+  const role: string | undefined = user?.publicMetadata.role as string;
+  const isAdmin = role === 'admin';
+
   return (
     <Routes>
       <Route path="" element={<PostListViewer />} />
@@ -14,17 +19,23 @@ const PostRoutes: React.FC<RouteProps> = () => {
       <Route
         path="create"
         element={
-          <SignedIn>
-            <PostEditorView />
-          </SignedIn>
+          <>
+            <SignedIn>{isAdmin ? <PostEditorView /> : <NotFound />}</SignedIn>
+            <SignedOut>
+              <NotFound />
+            </SignedOut>
+          </>
         }
       />
       <Route
         path="update/:postId"
         element={
-          <SignedIn>
-            <PostEditorView />
-          </SignedIn>
+          <>
+            <SignedIn>{isAdmin ? <PostEditorView /> : <NotFound />}</SignedIn>
+            <SignedOut>
+              <NotFound />
+            </SignedOut>
+          </>
         }
       />
     </Routes>
