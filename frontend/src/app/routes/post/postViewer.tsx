@@ -27,7 +27,7 @@ export const PostViewer: React.FC = () => {
   }, []);
   return (
     <ContentLayout>
-      <div className="lg:w-3/5 m-auto">
+      <div className="m-auto">
         {post && (
           <>
             <SignedIn>
@@ -43,14 +43,16 @@ export const PostViewer: React.FC = () => {
               )}
             </SignedIn>
             <PostView post={post} />
-            <DiscussionEmbed
-              shortname="staging-15"
-              config={{
-                url: `http://statign-15.disqus.com/post/${postId}`,
-                identifier: postId,
-                title: post?.title,
-              }}
-            />
+            <div className="mt-16">
+              <DiscussionEmbed
+                shortname="staging-15"
+                config={{
+                  url: `http://statign-15.disqus.com/post/${postId}`,
+                  identifier: postId,
+                  title: post?.title,
+                }}
+              />
+            </div>
           </>
         )}
       </div>

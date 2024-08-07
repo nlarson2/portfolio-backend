@@ -29,7 +29,7 @@ export const PostEditorView: React.FC = () => {
       tagMap[tag.id] = { selected: false, tag: tag };
     });
 
-    console.log(post.tags)
+    console.log(post.tags);
     if (post.tags) {
       for (var i = 0; i < post.tags.length; i++) {
         if (!post.tags[i].id) {
@@ -80,7 +80,6 @@ export const PostEditorView: React.FC = () => {
     fetchData();
   }, [post]);
 
-
   const selected =
     'bg-space-cadet-blue text-platinum px-10 py-5 w-28 border-space-cadet-blue border-2';
   const notSelected =
@@ -88,7 +87,7 @@ export const PostEditorView: React.FC = () => {
 
   return (
     <ContentLayout>
-      <div className="lg:w-3/5 m-auto">
+      <div className="m-auto">
         <input
           className="bg-space-cadet-blue text-platinum px-10 py-5 rounded-lg"
           type="button"
