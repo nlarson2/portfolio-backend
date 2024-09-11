@@ -1,9 +1,0 @@
-build
-coverate
-**/*.html
-
-**/.git
-**/.svn
-**/.hg
-**/node_modules
-

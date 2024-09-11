@@ -56,7 +56,6 @@ export class PostController {
     if (token) {
       if (await request.server.auth.IsAdmin(token)) {
         const post = request.body;
-        console.log(post);
         if (post.uuid) {
           await request.server.db.postRepo.update(post.uuid, post);
           reply.code(200).send({ uuid: post.uuid });
