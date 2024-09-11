@@ -98,8 +98,10 @@ export class PostRepository extends BaseRepository<Post, string> {
       if (newTagsLen > 0 && currentLinkedTags.length > 0) {
         for (let i = newTagsLen - 1; i >= 0; i--) {
           for (let j = currentLinkedTags.length - 1; j >= 0; j--) {
-            if (newTags[i].id == currentLinkedTags[j]?.tag_id) {
-              newTags = newTags?.filter((tag) => tag.id != newTags[i].id);
+            if (newTags && newTags[i].id == currentLinkedTags[j]?.tag_id) {
+              newTags = newTags.filter(
+                (tag) => newTags && tag.id != newTags[i].id,
+              );
               currentLinkedTags = currentLinkedTags?.filter(
                 (tag) => tag.tag_id != currentLinkedTags[j].tag_id,
               );
@@ -110,11 +112,10 @@ export class PostRepository extends BaseRepository<Post, string> {
       }
 
       newTags?.map(async (tag) => {
-        await this.addTag(tag.id, item.id);
+        if (tag.id && item.id) await this.addTag(tag.id, item.id);
       });
-
       currentLinkedTags.map(async (tag) => {
-        await this.removeTag(tag.tag_id, item.id);
+        if (tag.id && item.id) await this.removeTag(tag.tag_id, item.id);
       });
     } catch (e: any) {
       console.log(e);
