@@ -1,0 +1,53 @@
+name: Build UI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: self-hosted
+
+    steps:
+      # Step 1: Checkout the source code
+      - name: Checkout source repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up your language environment (example: Node.js)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+      
+      - name: Create .env file
+        run: |
+          echo "CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY}}" >> .env
+          echo "CLERK_JWT_KEY=${{ secrets.CLERK_JWT_KEY}}" >> .env
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+
+      # Build and tag Docker image with remote registry
+      - name: Build and tag Docker image
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login https://${{ secrets.DOCKER_REGISTRY }} --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker build --no-cache --target production -t ${{secrets.DOCKER_REGISTRY}}/${{ secrets.DOCKER_USERNAME }}/portfolio-backend:${{ github.sha }} .
+          docker push  ${{secrets.DOCKER_REGISTRY}}/${{ secrets.DOCKER_USERNAME }}/portfolio-backend:${{ github.sha }}
+      
+      - name: Set up SSH
+        run: |
+          mkdir -p ~./ssh
+          echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Execute commands
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} << 'EOF'
+            docker pull ${{ secrets.DOCKER_REGISTRY}}/nlarson/portfolio-backend:${{ github.sha }}
+            docker stop portfolio-backend || true
+            docker rm portfolio-backend || true
+            docker run -d --name portfolio-backend -p 3000:3000 \
+            ${{ secrets.DOCKER_REGISTRY}}/nlarson/portfolio-ui:${{ github.sha }}
+          EOF
