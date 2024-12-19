@@ -52,6 +52,6 @@ jobs:
             docker pull ${{ secrets.DOCKER_REGISTRY}}/nlarson/portfolio-backend:${{ github.sha }}
             docker stop portfolio-backend || true
             docker rm portfolio-backend || true
-            docker run -d --name portfolio-backend -p 3000:3000 \
-            ${{ secrets.DOCKER_REGISTRY}}/nlarson/portfolio-ui:${{ github.sha }}
+            docker run -d --name portfolio-backend -p 44444:44444 \
+            ${{ secrets.DOCKER_REGISTRY}}/nlarson/portfolio-backend:${{ github.sha }}
           EOF
