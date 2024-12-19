@@ -3,10 +3,10 @@ FROM node:21.7.1 AS node
 FROM node AS node-build
 COPY package*.json ./
 RUN npm install
+EXPOSE 44444
 
 FROM node-build AS development
 WORKDIR /app
-EXPOSE 44444
 
 ENTRYPOINT ["npm", "run", "dev"]
 
@@ -20,6 +20,5 @@ COPY --from=production-build /app/build /app/build
 RUN npm install -g serve
 
 WORKDIR /app
-EXPOSE 3000
-
-ENTRYPOINT ["serve", "-s", "build"]
+ENTRYPOINT ["node", "build/index.js"]
+# ENTRYPOINT ["serve", "-s", "build"]
