@@ -11,6 +11,7 @@ EXPOSE 44444
 ENTRYPOINT ["npm", "run", "dev"]
 
 FROM development AS production-build
+COPY . .
 RUN npm run build
 
 FROM node AS production
