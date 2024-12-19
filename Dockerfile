@@ -20,5 +20,5 @@ COPY --from=production-build /app/build /app/build
 RUN npm install -g serve
 
 WORKDIR /app
-ENTRYPOINT ["node", "index.js"]
+ENTRYPOINT ["node", "build/index.js"]
 # ENTRYPOINT ["serve", "-s", "build"]
