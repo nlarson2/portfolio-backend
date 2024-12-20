@@ -8,7 +8,6 @@ export abstract class BaseRepository<T, I>
   protected db: pgDB;
   constructor(db: pgDB) {
     this.db = db;
-    this.setup();
   }
 
   setup() {

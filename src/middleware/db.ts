@@ -50,7 +50,9 @@ const db = (config: any) => {
     client.connect();
 
     const postRepo: PostRepository = new PostRepository(client);
+    postRepo.setup();
     const tagRepo: TagRepository = new TagRepository(client);
+    tagRepo.setup();
     const repos: Repos = { postRepo: postRepo, tagRepo: tagRepo };
 
     req.db = repos;
