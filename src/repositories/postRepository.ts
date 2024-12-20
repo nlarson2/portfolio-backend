@@ -10,7 +10,7 @@ export class PostRepository extends BaseRepository<Post, string> {
 
   async setup() {
     const query = `
-      create table if not exists Posts (
+      create table if not exists public."Posts" (
         id integer primary key,
         uuid varchar,
         title varchar,

@@ -8,14 +8,14 @@ export class TagRepository extends BaseRepository<Tag, number> {
 
   async setup() {
     let query = `
-      create table if not exists Tags (
+      create table if not exists public."Tags" (
         id integer primary key,
         name varchar
       )
     `;
     await this.db.query(query);
     query = `
-      create table if not exists post_has_tag (
+      create table if not exists public."post_has_tag" (
         id integer primary key,
         post_id integer,
         tag_id integer
