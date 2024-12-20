@@ -8,6 +8,22 @@ export class PostRepository extends BaseRepository<Post, string> {
     return [];
   }
 
+  async setup() {
+    const query = `
+      create table if not exists public."Posts" (
+        id integer primary key,
+        uuid string,
+        title string,
+        content string,
+        created_at timestamp,
+        thumbnail_link string,
+        disqus_comment_link string
+      )
+    `;
+    await this.db.query(query);
+    return;
+  }
+
   async findOne(id: string): Promise<Post | undefined> {
     let posts: Post[] = [];
     const query = 'select * from public."Posts" where uuid=$1';

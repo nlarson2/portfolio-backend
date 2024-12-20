@@ -8,6 +8,11 @@ export abstract class BaseRepository<T, I>
   protected db: pgDB;
   constructor(db: pgDB) {
     this.db = db;
+    this.setup();
+  }
+
+  setup() {
+    throw new Error("Method not implmented");
   }
 
   find(_item: T): Promise<T[]> {
@@ -21,10 +26,10 @@ export abstract class BaseRepository<T, I>
     throw new Error("Method not implemented");
   }
 
-  create(_item: T): Promise<T|undefined> {
+  create(_item: T): Promise<T | undefined> {
     throw new Error("Method not implemented");
   }
-  update(_id: I, _item: T): Promise<T|undefined> {
+  update(_id: I, _item: T): Promise<T | undefined> {
     throw new Error("Method not implemented");
   }
   delete(_id: I): Promise<boolean> {

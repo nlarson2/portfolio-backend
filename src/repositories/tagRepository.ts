@@ -6,6 +6,24 @@ export class TagRepository extends BaseRepository<Tag, number> {
     return [];
   }
 
+  async setup() {
+    let query = `
+      create table if not exists public."Posts" (
+        id integer primary key,
+        name string
+      )
+    `;
+    await this.db.query(query);
+    query = `
+      create table if not exists public."post_has_tag" (
+        id integer primary key,
+        post_id integer,
+        tag_id integer
+      )
+    `;
+    await this.db.query(query);
+  }
+
   async findOne(id: number): Promise<Tag | undefined> {
     let tags: Tag[] = [];
     const query = 'select * from public."Tags" where id=$1';
