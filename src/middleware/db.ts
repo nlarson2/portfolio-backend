@@ -51,6 +51,7 @@ const db = (config: any) => {
 
     const postRepo: PostRepository = new PostRepository(client);
     postRepo.setup();
+    console.log("SETTING UP REPOS");
     const tagRepo: TagRepository = new TagRepository(client);
     tagRepo.setup();
     const repos: Repos = { postRepo: postRepo, tagRepo: tagRepo };
