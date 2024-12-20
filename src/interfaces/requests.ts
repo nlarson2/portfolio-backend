@@ -1,33 +1,39 @@
-import { RequestGenericInterface } from "fastify";
+// import { Request } from "express";
 import { Post } from "../models/postModel";
 import { Tag } from "../models/tagModel";
+import { Repos } from "../middleware/db";
+import { Authentication } from "../middleware/auth";
+
+// export interface Request {
+//   db: Repos;
+//   auth: Authentication;
+// }
 
 //POSTS
-export interface IGetPost extends RequestGenericInterface {
-  Params: { id: string };
+export interface IGetAll extends Request {}
+export interface IGetPost extends Request {
+  id: string;
 }
 
-export interface ICreatePost extends RequestGenericInterface {
-  // Body: { title: string; content: string; [key: string]: any };
-  Body: Post;
-  Header: { authorization: string };
+export interface ICreatePost extends Request {
+  authorization: string;
 }
 
-export interface IUpdatePost extends RequestGenericInterface {
-  Body: Post;
+export interface IUpdatePost extends Request {
+  // body: Post;
 }
 
-export interface IDeletePost extends RequestGenericInterface {
-  Body: Post;
-  Header: { authorization: string };
+export interface IDeletePost extends Request {
+  // body: Post;
+  authorization: string;
 }
 
 //TAGS
-export interface ICreateTag extends RequestGenericInterface {
-  Body: Tag;
-  Header: { authorization: string };
+export interface ICreateTag extends Request {
+  // body: Tag;
+  authorization: string;
 }
-export interface IDeleteTag extends RequestGenericInterface {
-  Body: Tag;
-  Header: { authorization: string };
+export interface IDeleteTag extends Request {
+  // body: Tag;
+  authorization: string;
 }

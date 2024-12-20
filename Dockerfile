@@ -1,6 +1,7 @@
 FROM node:21.7.1 AS node
 
 FROM node AS node-build
+WORKDIR /app
 COPY package*.json ./
 RUN npm install
 EXPOSE 44444
@@ -14,11 +15,14 @@ FROM development AS production-build
 COPY . .
 RUN npm run build
 
-FROM node AS production
+FROM node-build AS production
+COPY . .
+RUN npm run build
+# COPY --from=production-build /app/build /app/build
+# RUN npm install -g serve
+# RUN npm install fastify
 
-COPY --from=production-build /app/build /app/build
-RUN npm install -g serve
-
-WORKDIR /app
-ENTRYPOINT ["node", "build/index.js"]
+WORKDIR /app/build
+CMD ["node", "index.js"]
+# ENTRYPOINT ["node", "build/index.js"]
 # ENTRYPOINT ["serve", "-s", "build"]

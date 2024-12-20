@@ -1,6 +1,5 @@
 import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { FastifyInstance, FastifyPluginAsync } from "fastify";
-import fp from "fastify-plugin";
+import { Request, Response, NextFunction } from "express";
 
 export interface Authentication {
   IsAuthenticated: (jwt: string) => Promise<boolean>;
@@ -17,7 +16,9 @@ const clerkClient = createClerkClient({
 
 export const CheckIsAuthenticated = async (jwt: string): Promise<boolean> => {
   try {
-    const userData = await clerkClient.verifyToken(jwt.split(" ")[1], {jwtKey: process.env.CLERK_JWT_KEY});
+    const userData = await clerkClient.verifyToken(jwt.split(" ")[1], {
+      jwtKey: process.env.CLERK_JWT_KEY,
+    });
     return userData != undefined;
   } catch (e: any) {
     console.log(`Failed to authenticate:\nToken: ${jwt}\nError: ${e}`);
@@ -27,7 +28,9 @@ export const CheckIsAuthenticated = async (jwt: string): Promise<boolean> => {
 
 export const CheckIsAdmin = async (jwt: string): Promise<boolean> => {
   try {
-    const userData = await clerkClient.verifyToken(jwt.split(" ")[1], {jwtKey: process.env.CLERK_JWT_KEY});
+    const userData = await clerkClient.verifyToken(jwt.split(" ")[1], {
+      jwtKey: process.env.CLERK_JWT_KEY,
+    });
     if (!userData) return false;
     const metaData: MetaData = userData.metadata as MetaData;
     return metaData && metaData.role === "admin";
@@ -39,15 +42,12 @@ export const CheckIsAdmin = async (jwt: string): Promise<boolean> => {
   return false;
 };
 
-const ClerkAuthentication: FastifyPluginAsync = async (
-  instance: FastifyInstance,
-) => {
-  const auth: Authentication = {
+export default function auth(req: Request, res: Response, next: NextFunction) {
+  const authentication: Authentication = {
     IsAuthenticated: CheckIsAuthenticated,
     IsAdmin: CheckIsAdmin,
   };
 
-  instance.decorate("auth", auth);
-};
-
-export default fp(ClerkAuthentication);
+  req.auth = authentication;
+  next();
+}

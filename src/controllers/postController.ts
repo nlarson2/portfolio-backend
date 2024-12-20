@@ -1,92 +1,96 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import { Request, Response } from "express";
 import { IGetPost, ICreatePost, IUpdatePost, IDeletePost } from "../interfaces";
 import { Repos } from "../middleware/db";
 import { Authentication } from "../middleware/auth";
 
-declare module "fastify" {
-  interface FastifyInstance {
-    db: Repos;
-    auth: Authentication;
-  }
-}
+// declare module global {
+//   namespace Express {
+//     interface Request {
+//       db: Repos;
+//       auth: Authentication;
+//     }
+//   }
+// }
 
 export class PostController {
   public static getPost = async (
-    request: FastifyRequest<IGetPost>,
-    reply: FastifyReply,
+    request: Request<IGetPost>,
+    response: Response,
   ) => {
     const { id: uuid } = request.params;
-    let post = await request.server.db.postRepo.findOne(uuid);
-    reply.code(200).send({ post: post });
+    let post = await request.db.postRepo.findOne(uuid);
+    response.status(200).json({ post: post });
+    return;
   };
 
   public static getListOfPosts = async (
-    request: FastifyRequest,
-    reply: FastifyReply,
+    request: Request,
+    response: Response,
   ) => {
-    let posts = await request.server.db.postRepo.getAll();
-    return reply.code(200).send({ posts: posts });
+    let posts = await request.db.postRepo.getAll();
+    response.status(200).json({ posts: posts });
+    return;
   };
 
   public static createPost = async (
-    request: FastifyRequest<ICreatePost>,
-    reply: FastifyReply,
+    request: Request<ICreatePost>,
+    response: Response,
   ) => {
     const token = request.headers.authorization;
     if (token) {
-      if (await request.server.auth.IsAdmin(token)) {
+      if (await request.auth.IsAdmin(token)) {
         const newPost = request.body;
-        const post = await request.server.db.postRepo.create(newPost);
+        const post = await request.db.postRepo.create(newPost);
 
         if (post) {
-          reply.code(200).send({ uuid: post.uuid });
+          response.status(200).json({ uuid: post.uuid });
           return;
         }
       }
     }
-    reply.code(401).send({ resp: "invalid token" });
+    response.status(401).json({ resp: "invalid token" });
     return;
   };
 
   public static updatePost = async (
-    request: FastifyRequest<IUpdatePost>,
-    reply: FastifyReply,
+    request: Request<IUpdatePost>,
+    response: Response,
   ) => {
     const token = request.headers.authorization;
     if (token) {
-      if (await request.server.auth.IsAdmin(token)) {
+      if (await request.auth.IsAdmin(token)) {
         const post = request.body;
         if (post.uuid) {
-          await request.server.db.postRepo.update(post.uuid, post);
-          reply.code(200).send({ uuid: post.uuid });
+          await request.db.postRepo.update(post.uuid, post);
+          response.status(200).json({ uuid: post.uuid });
         } else {
-          reply.code(400);
+          response.status(400);
         }
         return;
       }
     }
-    reply.code(401).send({ resp: "invalid token" });
+    response.status(401).json({ resp: "invalid token" });
     return;
   };
 
   public static deletePost = async (
-    request: FastifyRequest<IDeletePost>,
-    reply: FastifyReply,
+    request: Request<IDeletePost>,
+    response: Response,
   ) => {
     const token = request.headers.authorization;
     if (token) {
-      if (await request.server.auth.IsAdmin(token)) {
+      if (await request.auth.IsAdmin(token)) {
         const post = request.body;
         if (post.uuid) {
-          await request.server.db.postRepo.delete(post.uuid);
-          reply.code(200);
+          await request.db.postRepo.delete(post.uuid);
+          response.status(200);
         } else {
-          reply.code(400);
+          response.status(400);
         }
         return;
       }
     }
-    reply.code(401).send({ resp: "invalid token" });
+    response.status(401).json({ resp: "invalid token" });
     return;
   };
 }

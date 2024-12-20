@@ -1,64 +1,70 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import { Request, Response } from "express";
 import { Tag } from "../models/tagModel";
 import { Repos } from "../middleware/db";
 import { Authentication } from "../middleware/auth";
 import { ICreateTag, IDeleteTag } from "../interfaces/requests";
 
-declare module "fastify" {
-  interface FastifyInstance {
-    db: Repos;
-    auth: Authentication;
-  }
-}
+// declare module global {
+//   namespace Express {
+//     interface Request {
+//       db: Repos;
+//       auth: Authentication;
+//     }
+//   }
+// }
 
 export class TagController {
   public static getListOfTags = async (
-    request: FastifyRequest,
-    reply: FastifyReply,
+    request: Request,
+    response: Response,
   ) => {
-    let tags: Tag[] = await request.server.db.tagRepo.getAll();
-    return reply.code(200).send({ tags: tags });
+    // console.log(request);
+
+    // return response.status(200).send("HERE");
+
+    let tags: Tag[] = await request.db.tagRepo.getAll();
+    response.status(200).json({ tags: tags });
+    return;
   };
 
   public static createTag = async (
-    request: FastifyRequest<ICreateTag>,
-    reply: FastifyReply,
+    request: Request<ICreateTag>,
+    response: Response,
   ) => {
     const token = request.headers.authorization;
     if (token) {
-      if (await request.server.auth.IsAdmin(token)) {
+      if (await request.auth.IsAdmin(token)) {
         const newTag: Tag = request.body;
-        const tag: Tag | undefined =
-          await request.server.db.tagRepo.create(newTag);
+        const tag: Tag | undefined = await request.db.tagRepo.create(newTag);
 
         if (tag) {
-          reply.code(200).send(tag);
+          response.status(200).json(tag);
           return;
         }
       }
     }
-    reply.code(401).send({ resp: "invalid token" });
+    response.status(401).json({ resp: "invalid token" });
     return;
   };
 
   public static deleteTag = async (
-    request: FastifyRequest<IDeleteTag>,
-    reply: FastifyReply,
+    request: Request<IDeleteTag>,
+    response: Response,
   ) => {
     const token = request.headers.authorization;
     if (token) {
-      if (await request.server.auth.IsAdmin(token)) {
+      if (await request.auth.IsAdmin(token)) {
         const tag: Tag = request.body;
         if (tag.id) {
-          await request.server.db.tagRepo.delete(tag.id);
-          reply.code(200);
+          await request.db.tagRepo.delete(tag.id);
+          response.status(200);
         } else {
-          reply.code(400);
+          response.status(400);
         }
         return;
       }
     }
-    reply.code(401).send({ resp: "invalid token" });
+    response.status(401).json({ resp: "invalid token" });
     return;
   };
 }

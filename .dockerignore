@@ -1,2 +1,4 @@
 .env
 eslint.config.js
+node_modules
+build

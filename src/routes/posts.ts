@@ -1,13 +1,22 @@
-import { FastifyInstance } from "fastify";
+import { Router } from "express";
+
 import { PostController } from "../controllers/postController";
 
-const posts = (fastify: FastifyInstance, opts: any, done: any) => {
-  fastify.get("", PostController.getListOfPosts);
-  fastify.get("/:id", PostController.getPost);
-  fastify.post("/new-post", PostController.createPost);
-  fastify.post("/update", PostController.updatePost);
-  fastify.post("/delete", PostController.deletePost);
-  done();
-};
+export const posts = Router();
 
-export { posts };
+posts.get("/", PostController.getListOfPosts);
+posts.get("/:id", PostController.getPost);
+posts.post("/new-post", PostController.createPost);
+posts.post("/update", PostController.updatePost);
+posts.post("/delete", PostController.deletePost);
+
+// Vconst posts = (posts: postsInstance, opts: any, done: any) => {
+//   posts.get("", PostController.getListOfPosts);
+//   posts.get("/:id", PostController.getPost);
+//   posts.post("/new-post", PostController.createPost);
+//   posts.post("/update", PostController.updatePost);
+//   posts.post("/delete", PostController.deletePost);
+//   done();
+// };
+//
+// export { posts };
