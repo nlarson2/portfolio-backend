@@ -10,7 +10,7 @@ export class TagRepository extends BaseRepository<Tag, number> {
     let query = `
       create table if not exists Tags (
         id integer primary key,
-        name string
+        name varchar
       )
     `;
     await this.db.query(query);

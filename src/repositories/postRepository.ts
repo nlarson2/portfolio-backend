@@ -12,12 +12,12 @@ export class PostRepository extends BaseRepository<Post, string> {
     const query = `
       create table if not exists Posts (
         id integer primary key,
-        uuid string,
-        title string,
-        content string,
+        uuid varchar,
+        title varchar,
+        content varchar,
         created_at timestamp,
-        thumbnail_link string,
-        disqus_comment_link string
+        thumbnail_link varchar,
+        disqus_comment_link varchar
       )
     `;
     await this.db.query(query);
