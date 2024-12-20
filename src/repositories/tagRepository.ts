@@ -8,7 +8,7 @@ export class TagRepository extends BaseRepository<Tag, number> {
 
   async setup() {
     let query = `
-      create table if not exists public."Posts" (
+      create table if not exists public."Tags" (
         id integer primary key,
         name string
       )
